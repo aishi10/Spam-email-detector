@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="tag">Spam Classifier</div>
+  <h1>Check a message in seconds.</h1>
+  <p>
+    This site uses the local dataset in <code>emails.csv</code> and a trained model to label messages as spam or ham.
+  </p>
+
+  <div class="stats">
+    <div class="stat">
+      <span>Model</span>
+      <strong>Multinomial Naive Bayes</strong>
+    </div>
+    <div class="stat">
+      <span>Model File</span>
+      <strong>{{ model_path }}</strong>
+    </div>
+    <div class="stat">
+      <span>Status</span>
+      <strong>{{ "Ready" if model_ready else "Missing" }}</strong>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <form method="post" class="form">
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="7" placeholder="Type a message to classify...">{{ message }}</textarea>
+
+    <div class="samples">
+      <button type="button" data-sample="Congratulations! You won a lottery!">Spam sample</button>
+      <button type="button" data-sample="Meeting at 10 AM tomorrow.">Ham sample</button>
+      <button type="button" data-sample="Urgent! Verify your account now.">Spam sample 2</button>
+    </div>
+
+    <button type="submit" class="primary">Analyze</button>
+  </form>
+
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+  {% endif %}
+
+  {% if result %}
+    <div class="result {{ result.label|lower }}">
+      <div class="badge">{{ result.label }}</div>
+      <h2>Prediction: {{ result.label }}</h2>
+      <p>Confidence: {{ "%.2f"|format(result.confidence * 100) }}%</p>
+      <div class="message-box">
+        <span>Message</span>
+        <p>{{ result.text }}</p>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+<section class="footer">
+  <div>
+    <strong>Training recap</strong>
+    <p>The dataset was generated, trained, and evaluated in this folder. You can regenerate it anytime with the local scripts.</p>
+  </div>
+  <div>
+    <strong>Extras</strong>
+    <p>Confusion matrix image: <code>{{ confusion_matrix_path }}</code></p>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll("[data-sample]").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.getElementById("message").value = button.dataset.sample;
+      document.getElementById("message").focus();
+    });
+  });
+</script>
+{% endblock %}
