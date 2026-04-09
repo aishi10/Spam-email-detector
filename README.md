@@ -2,7 +2,7 @@
 
 This folder contains a small end-to-end spam classification demo:
 
-- a synthetic dataset generator
+- dataset
 - a text classifier trained on that dataset
 - a prediction CLI
 - a Flask website for browser-based testing
@@ -10,7 +10,7 @@ This folder contains a small end-to-end spam classification demo:
 
 ## Files
 
-- `generate_dataset.py` creates `emails.csv`
+- `emails.csv`
 - `train_spam_classifier.py` trains the synthetic demo model and saves `spam_model.joblib`
 - `predict_email.py` predicts a single message from the saved model
 - `app.py` runs the website
@@ -22,12 +22,6 @@ From the project root:
 
 ```bash
 cd "/Users/chaku/Desktop/Spam Filtering/toy_spam_demo"
-```
-
-## Generate the synthetic dataset
-
-```bash
-python3 generate_dataset.py
 ```
 
 This writes `emails.csv` in the same folder.
@@ -67,8 +61,3 @@ python3 benchmark_real_dataset.py
 
 This uses the parent folder's real SMS spam data and reports a true held-out test-split accuracy.
 
-## Notes
-
-- The synthetic dataset is good for a demo, but it is not a realistic benchmark.
-- For real accuracy, use `benchmark_real_dataset.py`.
-- If you retrain the model, refresh the website so it loads the latest `spam_model.joblib`.
